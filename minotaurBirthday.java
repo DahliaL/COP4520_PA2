@@ -36,7 +36,7 @@ public class minotaurBirthday {
         boolean valid = true;
         for (boolean b : visited) {
             if (!b) {
-                System.out.print("The Minotaur is not satisfied!");
+                System.out.println("The Minotaur is not satisfied!");
                 valid = false;
                 break;
             }
@@ -62,7 +62,7 @@ public class minotaurBirthday {
     public static class guestAtParty implements Runnable {
         @Override
         public synchronized void run() {
-            eatOrReplace(curr -  1);
+            eatOrReplace(curr);
         }
     }
 
@@ -85,23 +85,30 @@ public class minotaurBirthday {
         int entries = 0; // this is for my own reason to verify that around n^2 entries happen
 
         while(count < N) {
-            curr = ThreadLocalRandom.current().nextInt(0, (int)N-1); // simulating a random guest getting chosen to enter
 
             try {
                 guests[curr].join();}
             catch(NullPointerException | InterruptedException ignored) {
             }
 
+            curr = ThreadLocalRandom.current().nextInt(0, (int)N); // simulating a random guest getting chosen to enter
+
             guests[curr] = new Thread(guestAtParty, "Thread"+curr);
+           // System.out.println(guests[curr].getName() + "entering...");
             guests[curr].start();
 
             entries++;
         }
 
-        System.out.print("The guests have decided to tell the Minotaur that all guests have entered the labyrinth. Is he satisfied?");
+        System.out.println("\nThe guests have decided to tell the Minotaur that all guests have entered the labyrinth. Is he satisfied?...");
 
         if(verifyEnd())
-            System.out.print("The Minotaur is satisfied! This took " + entries + "entries from the guests.");
+            System.out.println("\nThe Minotaur is satisfied!\n\nThis took " + entries + " entries from the guests.");
+
+        if(Math.pow(N, 2) > entries)
+            System.out.println("The time complexity matches the expected O(N^2). Whoo!");
+        else
+            System.out.println("The time complexity is a bit above the expected O(N^2). It is " + (entries-Math.pow(N, 2)) + " more than the N^2.");
 
     }
 }
