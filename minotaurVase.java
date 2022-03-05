@@ -33,7 +33,7 @@ class ShowroomQueue {
     public void letGuestIn() {
         queueLock.lock();
         try {
-            long duration = (long) (Math.random() * 100); // giving each guest time to admire the vase :)
+            long duration = (long) (Math.random() * 100); // giving each guest time to admire the vase :) 
             //System.out.println(Thread.currentThread().getName() + " has entered the showroom.");
             Thread.sleep(duration);
         } catch (InterruptedException ignored) {}
