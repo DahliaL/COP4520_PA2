@@ -33,7 +33,7 @@ class ShowroomQueue {
     public void letGuestIn() {
         queueLock.lock();
         try {
-            long duration = (long) (Math.random() * 1000);
+            long duration = (long) (Math.random() * 100); // giving each guest time to admire the vase :)
             //System.out.println(Thread.currentThread().getName() + " has entered the showroom.");
             Thread.sleep(duration);
         } catch (InterruptedException ignored) {}
@@ -72,18 +72,18 @@ class guestInLine implements Runnable {
 
 public class minotaurVase {
     public static void main(String[] args) throws InterruptedException {
-        System.out.print("Enter the number of guests that the Minotaur is hosting (must be greater than 0): ");
+        System.out.print("Enter the number of guests that the Minotaur is hosting (must be greater than 1): ");
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
 
         boolean valid = false;
         while(!valid) {
-            if(n > 0) {
+            if(n > 1) {
                 valid = true;
                 sc.close();
             }
             else {
-                System.out.println("N value must be greater than zero. Try again.");
+                System.out.println("N value must be greater than one. Try again.");
                 n = sc.nextInt();
             } }
 
@@ -92,15 +92,18 @@ public class minotaurVase {
         int count = 0;
         int prev = 0;
 
-        System.out.println("The crystal vase viewing is starting!");
+        System.out.println("\nThe crystal vase viewing is starting!\n");
         Thread[] guests = new Thread[n];
         ShowroomQueue line = new ShowroomQueue();
 
-
+        int entries = 0;
+        int reduced = n-1;
         while(count < n) {
             int curr = ThreadLocalRandom.current().nextInt(0, n);
 
-            while(line.getCurrentGuest() == curr || curr == prev || whoSawVase[curr] == n-1) {
+            while(line.getCurrentGuest() == curr || curr == prev || whoSawVase[curr] >= reduced) {
+                if(reduced-1 > 1 )
+                    reduced -= 1;
                 curr = ThreadLocalRandom.current().nextInt(0, n); // simulating a random guest getting in line
             }
 
@@ -111,19 +114,22 @@ public class minotaurVase {
 
             guests[curr] = new Thread(new guestInLine(line), "Guest " + curr);
             guests[curr].start();
+            entries++;
 
             prev = curr;
         }
 
         System.out.println("All guest have seen the vase, so the Minotaur is closing the queue.");
+        System.out.println("Waiting for the remaining guests in line...");
 
         // just making sure all the threads finish..
         try {
             for(int i = 0; i < n; i++)
                 guests[i].join();
         }
-
         catch(NullPointerException ignored) {}
+
+        System.out.println(n + " guests were able to see the vase a total of " + entries + " times.");
 
     }
 }
