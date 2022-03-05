@@ -18,7 +18,7 @@ In the command prompt/terminal, make sure you are in the correct directory, wher
 Both programs will prompt you to input a value n, the number of guests that the Minotaur will be hosting.
 
 # Summary of Approach and Efficiency of Design
-##### Problem 1: Minotaur Birthday Party
+#### Problem 1: Minotaur Birthday Party
 At the Minotaur's Birthday Party, every guest eating exactly one cupcake is the key to my approach.
 
 The guests deliberate and decide to designate a leader. This leader has two responsibilities:
@@ -46,7 +46,7 @@ Because the leader is just one person, and they themself are randomly chosen to 
 
 My program follows the explained algorithm. It simulates a random guest being chosen with ThreadLocal.Random. Then a while loop commences, iteratively checking for if a count variable that only the leader thread controls is < N. Inside of the while loop, a random guest is chosen and we gain access to the unique guest thread by an array of threads. The thread runs, simulating the maze visit exactly as described in my approach. The loop continues like so until the leaders count is equivalent to N. From there, the program verifies that ever guest has visited the maze, with verifyEnd() (explained below) and returns to the user how many times the guests altogether entered the maze, essentially telling the user the runtime of the algorithm.
 
-##### Problem 2: Minotaur Crystal Vase
+#### Problem 2: Minotaur Crystal Vase
 All of the provided algorithms are correct and get the job done. It's just a matter of what we are willing to sacrifice here...
 - Algorithm 1 is similar to a TASLock. It would yield high contention (large crowds of people trying to get in at once). If there was a time limit on how long the guests had to view the vase, algorithm #1 would not be starvation-free. Since every guest would be trying to acquire the showroom all at once, and the quickest guest would win the showroom spot, we cannot guarantee that every guest will be given the opportunity to see the crystal vase. That's a bummer...
 - Algorthm 2 is an improved step from Algorithm #1, similar to the TTAS lock. It reduces contention because guests will not attempt to acquire the showroom if the sign says 'BUSY.' This means the large crowds won't be a problem, but it falls short when a guest leaves and turns the sign to 'FREE.'' The guests see that the guest who had the showroom before left, and thus, they all must check to see the updated sign (this would be our cache misses, and now they have invalid accounts of the showroom's state) and thus, the crowds happen regardless since they all see the lock is free and attempt to obtain it. This means the performance isn't too different from algo 1.
