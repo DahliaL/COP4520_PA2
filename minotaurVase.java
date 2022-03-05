@@ -34,11 +34,11 @@ class ShowroomQueue {
         queueLock.lock();
         try {
             long duration = (long) (Math.random() * 1000);
-            System.out.println(Thread.currentThread().getName() + " has entered the showroom.");
+            //System.out.println(Thread.currentThread().getName() + " has entered the showroom.");
             Thread.sleep(duration);
         } catch (InterruptedException ignored) {}
         finally {
-            System.out.println(Thread.currentThread().getName() + " is leaving the showroom");
+            //System.out.println(Thread.currentThread().getName() + " is leaving the showroom");
             queueLock.unlock();
         }
     }
@@ -46,10 +46,10 @@ class ShowroomQueue {
     public int getCurrentGuest() {
         String temp = Thread.currentThread().getName();
 
-        if(temp.equals("main"))
+        if(temp.equals("main")) // we dont need main
             return -1;
 
-        temp = temp.substring(temp.indexOf(' ')+1);
+        temp = temp.substring(temp.indexOf(' ')+1); // getting thread #
 
         return Integer.parseInt(temp);
     }
@@ -65,14 +65,14 @@ class guestInLine implements Runnable {
 
     @Override
     public void run() {
-        System.out.println(Thread.currentThread().getName() + " has joined the queue.");
+        //System.out.println(Thread.currentThread().getName() + " has joined the queue.");
         showroomqueue.letGuestIn();
     }
 }
 
 public class minotaurVase {
     public static void main(String[] args) throws InterruptedException {
-        System.out.print("Enter the number of guests that the Minotaur's is hosting (must be greater than 0): ");
+        System.out.print("Enter the number of guests that the Minotaur is hosting (must be greater than 0): ");
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
 
@@ -117,10 +117,12 @@ public class minotaurVase {
 
         System.out.println("All guest have seen the vase, so the Minotaur is closing the queue.");
 
+        // just making sure all the threads finish..
         try {
             for(int i = 0; i < n; i++)
                 guests[i].join();
         }
+
         catch(NullPointerException ignored) {}
 
     }

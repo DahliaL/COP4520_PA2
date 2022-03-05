@@ -67,7 +67,7 @@ public class minotaurBirthday {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        System.out.print("Enter the number of guests attending the Minotaur's birthday party (must be greater than 0): ");
+        System.out.print("Enter the number of guests attending the Minotaur's birthday party (must be greater than 1): ");
         Scanner sc = new Scanner(System.in);
         N = sc.nextLong();
         sc.close();
@@ -93,7 +93,7 @@ public class minotaurBirthday {
 
             curr = ThreadLocalRandom.current().nextInt(0, (int)N); // simulating a random guest getting chosen to enter
 
-            guests[curr] = new Thread(guestAtParty, "Thread"+curr);
+            guests[curr] = new Thread(guestAtParty);
            // System.out.println(guests[curr].getName() + "entering...");
             guests[curr].start();
 
